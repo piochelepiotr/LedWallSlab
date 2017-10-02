@@ -1,0 +1,186 @@
+/* Eléments principaux de la page */
+
+body {
+    background-color: #FFFFA0;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    color: #181818;
+}
+
+#bloc_page {
+    width: 95%;
+    margin: auto;
+}
+
+section h1, footer h1, nav a {
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+/* Header */
+
+header {
+    border-bottom: solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-flow: row wrap;
+
+}
+
+#titre_principal {
+    display: flex;
+    flex-direction: column;
+}
+
+#logo {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+#logo img {
+    width: 100px;
+    height: 60px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    font-weight: normal;
+    margin: 0 0 0 10px;
+}
+
+header h2 {
+    font-size: 1.1em;
+    margin-top: 0px;
+    font-weight: normal;
+}
+
+/* Navigation */
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+nav li {
+    margin-right: 15px;
+}
+
+nav a {
+    font-size: 1.3em;
+    color: #181818;
+    padding-bottom: 3px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #760001;
+    border-bottom: 3px solid #760001;
+}
+
+.slab {
+    width: 70px;
+    height: 70px;
+    float: left;
+    border: solid 1px;
+    background-color: #E3F2FD;
+    opacity: 0.7;
+}
+
+.slab p {
+    font-size: xx-large;
+    text-align: center;
+    line-height: 70px; /* hauteur de ligne (identique) */
+    white-space: nowrap; /* interdiction de passer à la ligne */
+    margin: 0px;
+}
+
+#slabcontainer {
+    width: 72px;
+    height: 72px;
+    float: left;
+    outline: solid;
+    background-color: #aaaaaa;
+}
+
+footer {
+    display: table-row;
+}
+/* Version mobile */
+
+@media (max-width: 640px) {
+    *:not(.slab) {
+        box-sizing: border-box;
+    }
+
+
+    /* passer body (et tous les éléments de largeur fixe) en largeur automatique */
+    body {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* fixer une largeur maximale de 100% aux éléments potentiellement problématiques */
+    img,
+    table,
+    td,
+    blockquote,
+    code,
+    pre,
+    textarea,
+    input,
+    iframe,
+    object,
+    embed,
+    video {
+        max-width: 100%;
+    }
+
+    /* conserver le ratio des images */
+    img {
+        height: auto;
+    }
+
+    /* gestion des mots longs */
+    textarea,
+    table,
+    td,
+    th,
+    code,
+    pre,
+    samp {
+        -webkit-hyphens: auto; /* césure propre */
+        -moz-hyphens: auto;
+        hyphens: auto;
+        word-wrap: break-word; /* passage à la ligne forcé */
+    }
+
+    code,
+    pre,
+    samp {
+        white-space: pre-wrap; /* passage à la ligne spécifique pour les éléments à châsse fixe */
+    }
+
+    /* Passer à une seule colonne (à appliquer aux éléments multi-colonnes) */
+    .element1,
+    .element2 {
+        float: none;
+        width: auto;
+    }
+
+    /* masquer les éléments superflus */
+    .hide_mobile {
+        display: none !important;
+    }
+
+    /* Un message personnalisé */
+    body:before {
+        content: "Version mobile du site";
+        display: block;
+        text-align: center;
+        font-style: italic;
+        color: #777;
+    }
+}

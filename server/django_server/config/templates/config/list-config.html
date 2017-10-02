@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Configuration du panneau{% endblock %}
+{% block content %}
+    <h1>Page de configuration le {{ date|date:"SHORT_DATETIME_FORMAT" }}</h1>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Création</th>
+            <th>Modification</th>
+        </tr>
+        {% for config in configs %}
+            <tr>
+                <td>{{ config.name }}</td>
+                <td>{{ config.description }}</td>
+                <td>{{ config.creation|date:"SHORT_DATETIME_FORMAT" }}</td>
+                <td>{{ config.modification|date:"SHORT_DATETIME_FORMAT" }}</td>
+                <td><a href="{% url 'edit-config' config.id %}">Editer</a></td>
+            </tr>
+        {% empty %}
+            <p>Aucune config</p>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Configuration du panneau{% endblock %}
+{% block content %}
+    <h1>Page de configuration</h1>
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <div id="slabcontainer">
+
+            <div class="slab">
+                <p>1</p>
+            </div>
+        </div>
+        <div style="height: 200px; width: 300px">
+            <form>
+                <p>
+                    <label for="name">Nom de la config</label> : <input type="text"
+                                                                        name="name"
+                                                                        id="name"/><br>
+                    <label for="description">Description</label> : <textarea name="description"
+                                                                             rows="10"
+                                                                             cols="50"
+                                                                             id="description">Description</textarea><br>
+                    <label for="height">Hauteur de la source</label> : <input type="number"
+                                                                               min=18
+                                                                               name="height"
+                                                                               id="height"/><br>
+                    <label for="width">Largeur de la source</label> : <input type="number"
+                                                                               min=18
+                                                                               name="width"
+                                                                               id="width"/><br>
+                    <label for="number">Nombre de dalles</label> : <input type="number"
+                                                                          min=1
+                                                                          name="number"
+                                                                          id="number"/><br>
+                    <label for="FPSmax">Nombre de FPS max</label> : <input type="number"
+                                                                           min=1
+                                                                           max=100
+                                                                           name="FPSmax"
+                                                                           id="FPSmax"
+                                                                           value="60"/><br>
+                    <label for="primarySPImax">Vitesse max du SPI principal</label> : <input type="number" min="1000000"
+                                                                                             max="50000000"
+                                                                                             name="primarySPImax"
+                                                                                             id="primarySPImax"
+                                                                                             step="500000"
+                                                                                             value="32000000"/><br>
+                    <label for="secondarySPImax">Vitesse max du SPI secondaire</label> : <input type="number"
+                                                                                                min="1000000"
+                                                                                                max="16000000"
+                                                                                                name="secondarySPImax"
+                                                                                                id="secondarySPImax"
+                                                                                                step="500000"
+                                                                                                value="5000000"/><br>
+                </p>
+                <button type="button" id="save">Sauver la config</button>
+                <button type="button" id="apply">Sauver et appliquer la config</button>
+
+            </form>
+            <p id="posX"></p>
+            <p id="posY"></p>
+        </div>
+    </div>
+    <script src="{% static "js/jquery-1.12.4.js" %}"></script>
+    <script src="{% static "js/jquery-ui.js" %}"></script>
+    <script src="{% static 'js/jquery.ui.touch-punch.min.js' %}"></script>
+    <script>
+        $(function () {
+            // Functions definition
+            function setSlabDraggable() {
+                $(".slab").draggable({
+                    snap: "#slabcontainer, .slab",
+                    snapTolerance: 8,
+                    cursor: 'move',
+                    containment: "#slabcontainer",
+                    grid: [4, 4],
+                    stack: '.slab',
+                    distance: 0,
+                    drag: function () {
+                        $('#posX').text('x: ' + getSlabX($(this)));
+                        $('#posY').text('y: ' + getSlabY($(this)));
+                    }
+                });
+            }
+
+            function getSlabX(slab) {
+                var container_offset = $('#slabcontainer').offset()
+                var offset = $(slab).offset();
+                return ((offset.left - container_offset.left) / 4 + 1)
+            }
+
+            function getSlabY(slab) {
+                var container_offset = $('#slabcontainer').offset()
+                var offset = $(slab).offset();
+                return ((offset.top - container_offset.top) / 4 + 1)
+            }
+
+            function getConfig() {
+                var slabs = [];
+                $('.slab').each(function (i, slab) {
+                    slabs.push({x: getSlabX($(slab)), y: getSlabY($(slab))});
+                });
+                return {
+                    name: $('#name').val(),
+                    description: $('#description').val(),
+                    maxFPS: $('#FPSmax').val(),
+                    primarySPIspeed: $('#primarySPImax').val(),
+                    secondarySPIspeed: $('#secondarySPImax').val(),
+                    height: $('#height').val(),
+                    width: $('#width').val(),
+                    slabs: slabs
+                }
+            }
+
+            function setConfig(config) {
+                $('#slabcontainer').html('');
+                $('#name').val(config.name);
+                $('#description').val(config.description);
+                $('#FPSmax').val(config.maxFPS);
+                $('#primarySPImax').val(config.primarySPIspeed);
+                $('#secondarySPImax').val(config.secondarySPIspeed);
+                $('#height').val(config.height);
+                $('#width').val(config.width);
+                $('#slabcontainer').height(config.height * 4);
+                $('#slabcontainer').width(config.width * 4);
+                for (var slab of config.slabs) {
+                    $('#slabcontainer').append('<div class="slab"><p>' + ($('.slab').size() + 1) + '</p></div>');
+                    $('.slab').last().offset({
+                        top: ((slab.y - 1) * 4 + $('#slabcontainer').offset().top),
+                        left: ((slab.x - 1) * 4 + $('#slabcontainer').offset().left)
+                    });
+                }
+                $("#number").val($(".slab").size());
+                setSlabDraggable();
+            }
+
+            // Initialisation
+            $("#height").val($("#slabcontainer").height() / 4);
+            $("#width").val($("#slabcontainer").width() / 4);
+            $("#number").val($(".slab").size());
+            setSlabDraggable();
+            // Event handlers
+            $("#height").on('input', function () {
+                if ($(this).val() < 18) return;
+                $("#slabcontainer").height($(this).val() * 4);
+            });
+            $("#width").on('input', function () {
+                if ($(this).val() < 18) return;
+                $("#slabcontainer").width($(this).val() * 4);
+            });
+            $('#number').on('input', function () {
+                if ($(this).val() == '') return;
+                while ($('.slab').size() > $(this).val())
+                    $('.slab')[$('.slab').size() - 1].remove();
+                while ($('.slab').size() < $(this).val())
+                    $('#slabcontainer').append('<div class="slab"><p>' + ($('.slab').size() + 1) + '</p></div>');
+                setSlabDraggable();
+            });
+            $('#save').click(function () {
+                $.ajax({
+                    url: '{% url 'save-config' id %}',
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        setConfig(data);
+                        alert("Sauvé");
+                    },
+                    data: JSON.stringify(getConfig())
+                });
+            });
+            $('#apply').click(function () {
+                $.ajax({
+                    url: '{% url 'save-config' id 'apply' %}',
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        setConfig(data);
+                    },
+                    data: JSON.stringify(getConfig())
+                });
+            });
+            $.ajax({
+                    url: '{% url 'get-config' id %}',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        setConfig(JSON.parse(data));
+                    }
+                });
+        });
+
+
+    </script>
+{% endblock %}
