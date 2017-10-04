@@ -14,6 +14,7 @@ from color_server.spi_writer import SPIwriter
 from color_server.sync import UDPsync
 import queue
 
+
 class ColorServer():
     def __init__(self, port, sync_port, SPIspeed):
         gamma_coefs = [[1.12, 1.12, 1.12]]
@@ -24,7 +25,7 @@ class ColorServer():
         self.gamma_matrix = Gamma.gamma_matrix(gamma_coefs)
 
         self.receive_queue = queue.Queue()  # Receive FIFO
-        self.emit_ring_buffer = [bytearray([0, 0, 0, 0])] * 26; # Emit ring buffer
+        self.emit_ring_buffer = [bytearray([0, 0, 0, 0])] * 28; # Emit ring buffer (26 regular frames + version frame + number frame)
         self.sync_queue = queue.Queue()  # Top synchro FIFO
 
         # New TCP server
@@ -34,12 +35,7 @@ class ColorServer():
         # Create a translator (decode / encode)
         self.translator = Decoder(self.gamma_matrix, self.receive_queue, self.emit_ring_buffer)
         # Create the top synchro receiver
-        self.sync = UDPsync(self.sync_port, self.sync_queue)
-
-    def refresh(self, config):
-        logging.info("Mise à jour de la configuration")
-        logging.info(config)
-        self.tcp_server.reset_connection()
+        self.sync = UDPsync(self.sync_port, self.sync_queue, self)
 
     # Server listening for LED data
     def start_server(self):
@@ -61,6 +57,15 @@ class ColorServer():
         self.spi_writer._stop()
         self.sync._stop()
 
-    def update_config(self, config):
-        self.tcp_server.reset_connection()
+    def show_version(self):
+        pass
+
+    def show_slab_number(self):
+        pass
+
+    def restart_server(self):
+        pass
+
+    def reboot(self):
+        pass
 
