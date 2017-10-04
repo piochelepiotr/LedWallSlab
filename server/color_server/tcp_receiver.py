@@ -56,7 +56,9 @@ class TCPserver(Thread):
                     logging.info("Le client s'est déconnecté")
                     self.s.close()
                     self.s = None
-                self.buffer += b
+                    self.buffer = b''  # Buffer reset
+                else:
+                    self.buffer += b
 
             # Write in the reception FIFO only 1 frame
             self.queue.put(self.buffer[:self.frame_length])
@@ -72,7 +74,6 @@ class TCPserver(Thread):
         logging.info("Réinitialisation de la connexion TCP")
         self.s.close()
         self.s = None
-        self.__connexion();
 
     def __connexion(self):
         """
