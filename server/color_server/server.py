@@ -12,6 +12,7 @@ from color_server.gamma import Gamma
 from color_server.tcp_receiver import TCPserver
 from color_server.spi_writer import SPIwriter
 from color_server.sync import UDPsync
+from color_server.text import Text
 import queue
 
 
@@ -27,6 +28,13 @@ class ColorServer():
         self.receive_queue = queue.Queue()  # Receive FIFO
         self.emit_ring_buffer = [bytearray([0, 0, 0, 0])] * 28; # Emit ring buffer (26 regular frames + version frame + number frame)
         self.sync_queue = queue.Queue()  # Top synchro FIFO
+
+        # Fill the two text frames (version + slab number)
+        self.text = Text(1, 0, 90)
+        self.emit_ring_buffer[26] = self.text.get_version_frame()
+        self.emit_ring_buffer[27] = self.text.get_slab_number_frame()
+        self.sync_queue.put(27) # Show slab number on start
+
 
         # New TCP server
         self.tcp_server = TCPserver(self.port, self.frame_length, self.receive_queue)
@@ -56,12 +64,6 @@ class ColorServer():
         self.translator._stop()
         self.spi_writer._stop()
         self.sync._stop()
-
-    def show_version(self):
-        pass
-
-    def show_slab_number(self):
-        pass
 
     def restart_server(self):
         pass
