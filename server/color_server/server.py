@@ -24,7 +24,7 @@ class ColorServer():
         self.gamma_matrix = Gamma.gamma_matrix(gamma_coefs)
 
         self.receive_queue = queue.Queue()  # Receive FIFO
-        self.emit_ring_buffer = [bytearray([0, 0, 0, 0])] * 26;
+        self.emit_ring_buffer = [bytearray([0, 0, 0, 0])] * 26; # Emit ring buffer
         self.sync_queue = queue.Queue()  # Top synchro FIFO
 
         # New TCP server

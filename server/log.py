@@ -3,23 +3,18 @@
 
 import os
 import logging
-#import cherrypy
-#from ws4py.messaging import TextMessage
-
 from logging.handlers import RotatingFileHandler
 
-"""
-class WSConsoleHandler(logging.StreamHandler):
-    def emit(self, record):
-        msg = self.format(record)
-        cherrypy.engine.publish('websocket-broadcast', TextMessage(msg + '\n'))
-"""
 
 def config_logger():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+
+    # Create log folder if necessary :
+    if not os.path.exists('server/log'):
+        os.makedirs('server/log')
 
     # First handler : file
     file_handler = RotatingFileHandler('server/log/activity.log', 'a', 1000000, 1)

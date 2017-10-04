@@ -10,14 +10,6 @@ import log
 import logging
 from color_server.server import ColorServer
 import sys
-import os
-#sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'django_server/'))
-#os.environ["DJANGO_SETTINGS_MODULE"] = "django_server.ledwall.settings"
-#import django
-#django.setup()
-#import config.views as view
-#from external_run import DjangoThread
-import time
 
 
 """
@@ -33,7 +25,6 @@ def main():
 
     # Start color server
     logging.info("Création du ColorServer")
-    # /!\ Vitesse SPI gêne les autres Threads, pourquoi ?
     color_server = ColorServer(9999, 8888, 10000000) # Data TCP on port 9999 and sync on port 8888 UDP
                                                      # SPI @ 10Mbps
     color_server.start_server()
@@ -42,9 +33,7 @@ def main():
         color_server.join_server()
     except KeyboardInterrupt:
         print('########################### Interrupted #############################')
-        #django_server.stop_server()
         sys.exit(0)
-
 
 
 # If main program, start main

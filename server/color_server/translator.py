@@ -22,7 +22,9 @@ class Decoder(Thread):
 
         Thread.__init__(self)
 
-        self.number_of_slabs = len(gamma_matrix)
+        self.number_of_slabs = len(gamma_matrix) # While there is one OrangePi per slab, number_of_slabs=1
+                                                 # Historically, there was one RasPi controlling every slabs but
+                                                 # we encontered signal integrity problems
         self.gamma_matrix = gamma_matrix
         self.emit_ring_buffer = emit_ring_buffer
         self.receive_queue = receive_queue
@@ -33,20 +35,21 @@ class Decoder(Thread):
     def run(self):
         logging.info("Thread de conversion des données opérationnel")
         while not self.terminated:
-            recv_buffer = self.receive_queue.get()
-            frame_number, recv_buffer = recv_buffer[0], recv_buffer[1:] # Extract frame number
-            emit_buffer = bytearray([0, 0, 0, 0])
+            recv_buffer = self.receive_queue.get()  # Blocking until new data is received on TCP socket
+            frame_number, recv_buffer = recv_buffer[0], recv_buffer[1:] # Extract frame number and the frame content
+            emit_buffer = bytearray([0, 0, 0, 0])   # Create an empty bytearray we'll fill
 
-            idx = 0
-            for i in range(self.number_of_slabs):
+            idx = 0 # Index in the recv_buffer
+            for i in range(self.number_of_slabs): # Unused: there is 1 OrangePi per slab, so number_of_slabs=1
                 for j in range(self.NUMBER_OF_LED_PER_SLAB):
-                    emit_buffer.append(255)
-                    for k in range(3):
+                    emit_buffer.append(255) # First byte sent to a LED always OxFF
+                    for k in range(3): # RGB loop
                         emit_buffer.append(self.gamma_matrix[i,k,recv_buffer[idx]])
                         idx += 1
+            # To make the new frame display, we send the correct amount of 0xFF (push cascading data on SPI bus)
             for i in range(Decoder.NUMBER_OF_LED_PER_SLAB * self.number_of_slabs // 16 + 1):
                 emit_buffer.append(255)
-            self.emit_ring_buffer[frame_number] = emit_buffer
+            self.emit_ring_buffer[frame_number] = emit_buffer # Put this frame in the Ring Buffer
 
     def stop(self):
         self.terminated = True

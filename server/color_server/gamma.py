@@ -8,6 +8,7 @@ Useful to make the LED luminosity proportional to the command
 
 import numpy as np
 
+
 class Gamma:
     def gamma_table(gamma):
         """

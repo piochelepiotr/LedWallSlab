@@ -1,1 +1,0 @@
-{"name of configuration":"square3x3";"maxWidth":"3";"maxHeight":"3"}

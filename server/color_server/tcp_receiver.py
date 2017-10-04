@@ -13,6 +13,12 @@ from threading import Thread
 
 class TCPserver(Thread):
     def __init__(self, port, frame_length, queue):
+        """
+        This constructor init TCP socket
+        :param port: default 9999
+        :param frame_length: default 1 slab * 324 LEDs * 3 colors = 972 bytes long
+        :param queue: queue to put data in
+        """
         Thread.__init__(self)
 
         # Create socket
@@ -25,9 +31,11 @@ class TCPserver(Thread):
         self.f = None
         self.buffer = b'' # Buffer's type is bytes
 
-
-    # Server listening for LED data
     def run(self):
+        """
+        Thread function
+        :return:
+        """
         logging.info("Lancement du Thread d'écoute TCP...")
         # Start connection
         self.sock.bind(("", self.port))                                        # Listen on port 9999 from everywhere
@@ -54,21 +62,26 @@ class TCPserver(Thread):
             self.queue.put(self.buffer[:self.frame_length])
             self.buffer = self.buffer[self.frame_length:]
 
-    def __send_config(self):
-        pass
-
     def reset_connection(self):
+        """
+        Function called to reset TCP socket
+        :return:
+        """
         if self.s is None:
             return
         logging.info("Réinitialisation de la connexion TCP")
         self.s.close()
         self.s = None
+        self.__connexion();
 
     def __connexion(self):
+        """
+        Function called to start listening
+        :return:
+        """
         logging.info("En attente de connexion TCP sur le port " + str(self.port))
         # Wait for connection
         self.s, self.f = self.sock.accept()
         logging.info("Client TCP connecté")
         self.buffer = b''  # Buffer's type is bytes
-        #logging.info("Envoi de la configuration au client")
-        #self.__send_config()
+

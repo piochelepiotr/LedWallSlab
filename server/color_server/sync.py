@@ -26,7 +26,7 @@ class UDPsync(Thread):
         # Start connection
         self.sock.bind(("", self.port))                                        # Listen on port from everywhere
         while True:
-            frame_to_show, emmiter  = self.sock.recvfrom(1)
+            frame_to_show, emmiter = self.sock.recvfrom(1)
             frame_to_show = int.from_bytes(frame_to_show, byteorder='big')
             if 0 <= frame_to_show <= 25:     # while frame_to_show comes from UDP transmission, errors are possible
                 self.sync_queue.put(frame_to_show)
