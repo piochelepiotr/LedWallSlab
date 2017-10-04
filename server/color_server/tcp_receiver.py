@@ -45,10 +45,10 @@ class TCPserver(Thread):
 
         while True:
             while len(self.buffer) < self.frame_length:
-                if self.s == None:
+                if self.s is None:
                     self.__connexion()
                 try:
-                    b = self.s.recv(2048)
+                    b = self.s.recv(1024) # Should be a power of 2. Must be under 1944 (two frames). Try 512 ?
                 except socket.error:
                     continue
                 # In case of disconnection
@@ -56,7 +56,6 @@ class TCPserver(Thread):
                     logging.info("Le client s'est déconnecté")
                     self.s.close()
                     self.s = None
-                    self.buffer = b''  # Buffer reset
                 else:
                     self.buffer += b
 
@@ -84,5 +83,5 @@ class TCPserver(Thread):
         # Wait for connection
         self.s, self.f = self.sock.accept()
         logging.info("Client TCP connecté")
-        self.buffer = b''  # Buffer's type is bytes
+        self.buffer = b''  # Buffer reset
 

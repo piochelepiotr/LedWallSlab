@@ -2,13 +2,16 @@
 
 cd /home/ledwall/ledwall
 
+# Wait 5 seconds before trying to update
+sleep 5
+
 # testing internet connection
 ping -c 1 -q 8.8.8.8 | grep "1 received"
 if [ $? == 0 ]; then
-	echo "pulling repository :)";
+	echo "Connected to the internet, pullin repo \n";
 	git pull;
 else
-	echo "no connection : can't pull repository :'(";
+	echo "Not connected, start ledwell without pulling \n";
 fi
 
 # launch server in background
