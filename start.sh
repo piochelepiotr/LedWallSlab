@@ -8,10 +8,10 @@ sleep 5
 # testing internet connection
 ping -c 1 -q 8.8.8.8 | grep "1 received"
 if [ $? == 0 ]; then
-	echo "Connected to the internet, pullin repo \n";
+	echo "Connected to the internet, pulling repo";
 	git pull;
 else
-	echo "Not connected, start ledwell without pulling \n";
+	echo "Not connected, start ledwell without pulling";
 fi
 
 # launch server in background
