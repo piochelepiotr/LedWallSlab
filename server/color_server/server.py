@@ -30,7 +30,12 @@ class ColorServer():
         self.sync_queue = queue.Queue()  # Top synchro FIFO
 
         # Fill the two text frames (slab number, version, sub version)
-        self.text = Text(1, 0, 90)
+        with open('.version', 'r') as version_file:
+            version_string = version_file.read()
+            version, sversion = version_string.split(".", 1)
+        with open('.slab', 'r') as slab_file:
+            slab = int(slab_file.read())
+        self.text = Text(slab, version, sversion)
         self.emit_ring_buffer[26] = self.text.get_version_frame()
         self.emit_ring_buffer[27] = self.text.get_slab_number_frame()
         self.sync_queue.put(27) # Show slab number on start
