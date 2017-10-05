@@ -33,6 +33,8 @@ class ColorServer():
         with open('.version', 'r') as version_file:
             version_string = version_file.read()
             version, sversion = version_string.split(".", 1)
+            version = int(version)
+            sversion = int(sversion)
         with open('.slab', 'r') as slab_file:
             slab = int(slab_file.read())
         self.text = Text(slab, version, sversion)
