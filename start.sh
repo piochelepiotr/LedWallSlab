@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/ledwall/ledwall
+cd /home/ledwall/ledwallslab
 
 # Wait 5 seconds before trying to update
 sleep 5
