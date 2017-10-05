@@ -7,6 +7,7 @@ Created on Thu Jun 16 17:04:13 2016
 """
 
 import logging
+import os
 from color_server.translator import Decoder
 from color_server.gamma import Gamma
 from color_server.tcp_receiver import TCPserver
@@ -73,8 +74,10 @@ class ColorServer():
         self.sync._stop()
 
     def restart_server(self):
-        pass
+        self.stop_server()
 
-    def reboot(self):
-        pass
+    @staticmethod
+    def reboot():
+        os.system('reboot now')
+
 

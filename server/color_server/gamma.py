@@ -10,6 +10,7 @@ import numpy as np
 
 
 class Gamma:
+    @staticmethod
     def gamma_table(gamma):
         """
         This function generate corrected values according to the given gamma
@@ -24,6 +25,7 @@ class Gamma:
             l[i] = v
         return l
 
+    @staticmethod
     def gamma_matrix(gamma_coefs):
         """
         This function generate the gamma matrix using numpy

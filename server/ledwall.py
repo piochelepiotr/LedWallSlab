@@ -27,13 +27,13 @@ def main():
     logging.info("Création du ColorServer")
     color_server = ColorServer(9999, 8888, 10000000) # Data TCP on port 9999 and sync on port 8888 UDP
                                                      # SPI @ 10Mbps
-    color_server.start_server()
-
-    try:
-        color_server.join_server()
-    except KeyboardInterrupt:
-        print('########################### Interrupted #############################')
-        sys.exit(0)
+    while True:
+        color_server.start_server()
+        try:
+            color_server.join_server()
+        except KeyboardInterrupt:
+            print('########################### Interrupted #############################')
+            sys.exit(0)
 
 
 # If main program, start main
