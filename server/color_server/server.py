@@ -78,6 +78,6 @@ class ColorServer():
 
     @staticmethod
     def reboot():
-        os.system('reboot now')
+        os.system('sudo shutdown -r now')
 
 
