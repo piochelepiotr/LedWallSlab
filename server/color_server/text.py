@@ -22,7 +22,10 @@ class Text():
             for j in range(18):
                 frame.append(255)  # First byte sent to a LED always OxFF
                 for k in range(3):  # RGB loop
-                    frame.append(img.getpixel((i, j))[k])
+                    if i % 2 == 0:
+                        frame.append(img.getpixel((i, j))[k])
+                    else:
+                        frame.append(img.getpixel((i, 17-j))[k])
         # To make the new frame display, we send the correct amount of 0xFF (push cascading data on SPI bus)
         for i in range(21):  # Push to update, cf translator.py
             frame.append(255)
