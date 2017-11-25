@@ -46,4 +46,4 @@ build
 
 *~
 server/log
-.slab
+*.slab
