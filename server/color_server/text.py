@@ -31,14 +31,14 @@ class Text():
     def get_version_frame(self):
         img = Image.new('RGB', (18, 18))
         d = ImageDraw.Draw(img)
-        d.text((0, 3), self.version, fill=(255, 0, 0))
-        d.text((7, 3), self.sversion, fill=(0, 0, 255))
+        d.text((0, 3), str(self.version), fill=(255, 0, 0))
+        d.text((7, 3), str(self.sversion), fill=(0, 0, 255))
         return Text.__img_to_frame(img)
 
     def get_slab_number_frame(self):
         img = Image.new('RGB', (18, 18))
         d = ImageDraw.Draw(img)
-        d.text((4, 3), self.slab_number, fill=(0, 255, 0))
+        d.text((4, 3), str(self.slab_number), fill=(0, 255, 0))
         return Text.__img_to_frame(img)
 
 
