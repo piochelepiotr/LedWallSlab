@@ -3,23 +3,25 @@
 ### What is this repository for? ###
 
 * This repository hosts the slab embeded code. 
-* V0.9
+* V1.0
 
 ### How do I get set up? ###
 
 * How to install ?
-First install armbian on the RaspberryPi Zero. A image will soon be available on the repo.
+First install armbian on the RaspberryPi Zero.
 If you don't use the pre-configured image, you have to install SpiDev and give rights to the user to acces SPI port
 * Dependencies : 
 Python
 SPIdev for Python
+Pillow
 * Deployment instructions
-In ~/ledwall/ type "git pull" to update code
+Clone this repo in your home. 
+In ~/ledwallslab/ type "git pull" to update code
 
 ### Contribution guidelines ###
 
 Feel free to contribute ! 
-Have a look at the Boards to find which functionality to develop.
+Have a look at the Google doc to find which functionality to develop.
 Just make pull request.
 
 ### Who do I talk to? ###
